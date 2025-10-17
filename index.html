@@ -123,11 +123,11 @@
             <span class="text-xs font-semibold">@hafix</span>
           </a>
         </div>
-        <a href="#top" class="tap group rounded-xl px-4 py-2 text-xs font-semibold bg-gradient-to-r from-wc-primary to-wc-primaryDark text-white shadow-soft hover:shadow-lg hover:scale-105 transition-all duration-200">
+        <button id="backToTop" class="tap group rounded-xl px-4 py-2 text-xs font-semibold bg-gradient-to-r from-wc-primary to-wc-primaryDark text-white shadow-soft hover:shadow-lg hover:scale-105 transition-all duration-200">
           <span class="flex items-center gap-1">
             <span class="group-hover:-translate-y-0.5 transition-transform">↑</span>
           </span>
-        </a>
+        </button>
       </div>
     </div>
   </footer>
@@ -253,6 +253,14 @@
         btn.classList.remove('bg-rose-200');
         btn.classList.add('bg-wc-accent');
       }
+    });
+
+    // Smooth scroll to top functionality
+    document.getElementById('backToTop').addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
     });
 
     // Compact class tunes spacing via Tailwind utilities we swap via CSS variables

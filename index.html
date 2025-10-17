@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WordCamp Dhaka 2025 — Schedule</title>
+  <meta name="description" content="Mobile-friendly, offline-capable checklist schedule for WordCamp Dhaka 2025 (Oct 18). Mark sessions complete and they drop to the bottom." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Tailwind Play CDN (good enough for a single-file Vercel static deploy) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui'] },
+          colors: {
+            wc: {
+              // Palette inspired by the provided banner (warm coral/rose gradient)
+              primary: '#FF6B6B',     // coral
+              primaryDark: '#E84D4F', // darker coral/red
+              accent: '#FFD1D1',      // soft tint
+              ink: '#1A1A1A',
+              bg: '#FFF7F7',
+              card: '#FFFFFF'
+            }
+          },
+          boxShadow: {
+            soft: '0 10px 25px -10px rgba(232, 77, 79, 0.25)'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Subtle backdrop pattern to echo the skyline motif */
+    .skyline {
+      background: linear-gradient(180deg, rgba(255,107,107,0.08), rgba(255,107,107,0.04) 40%, rgba(255,107,107,0.0));
+    }
+    .tap { -webkit-tap-highlight-color: transparent; }
+  </style>
+</head>
+<body class="bg-wc-bg text-wc-ink min-h-screen flex flex-col">
+  <!-- Header -->
+  <header class="skyline sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-white/70 bg-white/90 border-b border-rose-100">
+    <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="size-9 rounded-xl bg-gradient-to-br from-wc-primary to-wc-primaryDark grid place-items-center text-white font-black shadow-soft">W</div>
+        <div>
+          <h1 class="text-base sm:text-lg font-bold leading-tight">WordCamp Dhaka 2025</h1>
+          <p class="text-xs sm:text-sm text-rose-700/80">Oct 18, 2025 · Senaprangon, Dhaka Cantonment (UTC+06)</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="toggleCompact" class="tap rounded-xl px-3 py-2 text-xs font-semibold bg-wc-accent text-wc-ink hover:bg-rose-200 focus:outline-none focus:ring-2 focus:ring-wc-primary">Compact</button>
+        <button id="resetBtn" class="tap rounded-xl px-3 py-2 text-xs font-semibold bg-white border border-rose-200 hover:bg-rose-50 focus:outline-none focus:ring-2 focus:ring-wc-primary">Reset</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero / Banner strip matching the color concept -->
+  <section class="bg-gradient-to-r from-wc-primary to-wc-primaryDark text-white">
+    <div class="max-w-3xl mx-auto px-4 py-3 sm:py-4 flex items-center justify-between">
+      <p class="text-sm sm:text-base font-medium">Conference Day · Saturday, Oct 18</p>
+      <span class="text-[11px] sm:text-xs opacity-90">Mobile-friendly · Mark complete → moves to bottom</span>
+    </div>
+  </section>
+
+  <!-- Controls -->
+  <section class="max-w-3xl mx-auto w-full px-4 py-3">
+    <div class="flex flex-wrap items-center gap-2">
+      <div class="grow"></div>
+      <label class="inline-flex items-center gap-2 text-sm select-none">
+        <input id="showFav" type="checkbox" class="size-4 rounded border-rose-300 text-wc-primary focus:ring-wc-primary" />
+        Show favorites only
+      </label>
+    </div>
+  </section>
+
+  <!-- Schedule List -->
+  <main class="max-w-3xl mx-auto w-full px-4 pb-24" id="app"></main>
+
+  <!-- Footer Nav -->
+  <footer class="fixed bottom-0 inset-x-0 bg-white/95 border-t border-rose-200 backdrop-blur">
+    <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
+      <span class="text-xs text-rose-700/80">Data persists to your browser</span>
+      <a href="#top" class="tap rounded-lg px-3 py-2 text-xs font-semibold bg-wc-primary text-white hover:opacity-95">Back to top</a>
+    </div>
+  </footer>
+
+  <script>
+    // ---- DATA ----
+    const DAY = '2025-10-18'; // local Asia/Dhaka day
+    const sessions = [
+      { id:'0900a', timeLabel:'9:00 am +06', title:'Registration and Venue Entry', slot:'9:00 am - 9:30 am' },
+      { id:'0930a', timeLabel:'9:30 am +06', title:'Opening Remarks & Welcome Note', slot:'9:30 am - 10:00 am' },
+      { id:'1000a', timeLabel:'10:00 am +06', title:'Unlocking the Invisible Layer: How MCP Servers Help You See WordPress Differently', slot:'10:00 am - 10:25 am', speakers:'Sumit Saha', categories:['Development','Long Talk'], fav:true },
+      { id:'1025a', timeLabel:'10:25 am +06', title:'LLM SEO – The Next Frontier of SEO', slot:'10:25 am - 10:40 am', speakers:'Shahriar Hasan', categories:['AI','Content','Lightning Talk','Marketing'], fav:true },
+      { id:'1040a', timeLabel:'10:40 am +06', title:'The Art & Philosophy of Onboarding & Product Management', slot:'10:40 am - 10:55 am', speakers:'Md Ashiquzzaman Kiron', categories:['Lightning Talk','Product'], fav:true },
+      { id:'1055a', timeLabel:'10:55 am +06', title:'Building SaaS-backed Plugins', slot:'10:55 am - 11:10 am', speakers:'Mohammad Emran Hasan', categories:['Business','Development','Lightning Talk'], fav:true },
+      { id:'1110a', timeLabel:'11:10 am +06', title:'Faceless or Fearless: How WP Professionals Can Win with Both Video Paths', slot:'11:10 am - 11:25 am', speakers:'Mizanur Rahaman Mizan', categories:['Content','Lightning Talk','Marketing','Video'], fav:true },
+      { id:'1125a', timeLabel:'11:25 am +06', title:'Scaling WordPress for High Traffic Websites', slot:'11:25 am - 11:40 am', speakers:'Arafat Islam', categories:['Development'], fav:true },
+      { id:'1140a', timeLabel:'11:40 am +06', title:'DEIB & Community Contribution within WordPress', slot:'11:40 am - 12:10 pm', speakers:'Mushrit Shabnam, Esrat Sultana Popy, A K M Muhibul Haque Muhibullah, Akramul Hasan, Sheuly Akter', categories:['Contribution','Diversity','Inclusion','Panel Discussion'], fav:true },
+      { id:'1210p', timeLabel:'12:10 pm +06', title:'Scratch to Pinnacle: The Mind Mapping of Unfolding Ideas', slot:'12:10 pm - 12:25 pm', speakers:'Ashif Mahmood', categories:['Design','Lightning Talk'], fav:true },
+      { id:'1225p', timeLabel:'12:25 pm +06', title:'Lunch & Prayer Break', slot:'12:25 pm - 1:45 pm' },
+      { id:'1345p', timeLabel:'1:45 pm +06', title:'Smarter WP Development with AI: How I Work with Cursor & AugmentCode', slot:'1:45 pm - 2:10 pm', speakers:'Nazmul Hasan Robin', categories:['Development','Long Talk'], fav:true },
+      { id:'1410p', timeLabel:'2:10 pm +06', title:'Balancing Work, Life, and Community: My Journey in WordPress', slot:'2:10 pm - 2:25 pm', speakers:'Anzuman Ara Chowdhury', categories:['Community','Contribution','Lightning Talk'], fav:true },
+      { id:'1425p', timeLabel:'2:25 pm +06', title:'How A.I. is Transforming WordPress', slot:'2:25 pm - 2:50 pm', speakers:'Nizam Uddin', categories:['AI','Business','Entrepreneurship','Long Talk'], fav:true },
+      { id:'1450p', timeLabel:'2:50 pm +06', title:'Future of WordPress in Bangladesh and Beyond', slot:'2:50 pm - 3:25 pm', speakers:'Md. Ataur Rahman, Tareq Hasan, Atiqur Rahaman, Shahjahan Jewel, Md Jakir Hasan', categories:['AI','Business','Entrepreneurship','Panel Discussion'], fav:true },
+      { id:'1525p', timeLabel:'3:25 pm +06', title:'Group Photo', slot:'3:25 pm - 3:35 pm' },
+      { id:'1535p', timeLabel:'3:35 pm +06', title:'Tea & Networking Break (Raffle Draw – Sponsor Hall)', slot:'3:35 pm - 3:45 pm' },
+      { id:'1545p', timeLabel:'3:45 pm +06', title:'WordPress Security in Action: Hardening Your Site and Server', slot:'3:45 pm - 4:10 pm', speakers:'Hasin Hayder', categories:['Development','Keynote Talk'], fav:true },
+      { id:'1610p', timeLabel:'4:10 pm +06', title:'Closing Keynote: Surprise Talk', slot:'4:10 pm - 4:20 pm', categories:['Invited Speaker','Surprise Talk'], fav:true },
+      { id:'1620p', timeLabel:'4:20 pm +06', title:'Raffle Draw for All Attendees', slot:'4:20 pm - 4:40 pm', categories:['Gaming Activity'] },
+      { id:'1640p', timeLabel:'4:40 pm +06', title:'Closing Remarks', slot:'4:40 pm - 5:45 pm' }
+    ];
+
+    // ---- PERSISTENCE ----
+    const STORAGE_KEY = 'wcd2025_schedule_state_v1';
+    const loadState = () => {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; }
+    };
+    const saveState = (state) => localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+
+    // ---- RENDER ----
+    const state = loadState();
+    const app = document.getElementById('app');
+
+    function render() {
+      const showFavOnly = document.getElementById('showFav').checked;
+      const compact = document.documentElement.classList.contains('compact');
+
+      // Partition by completion, keep original serial inside each bucket
+      const notDone = [], done = [];
+      (showFavOnly ? sessions.filter(s => s.fav) : sessions).forEach(s => {
+        (state[s.id]?.done ? done : notDone).push(s);
+      });
+
+      const list = [...notDone, ...done];
+      app.innerHTML = '';
+
+      list.forEach((s, idx) => {
+        const isDone = !!state[s.id]?.done;
+        const card = document.createElement('article');
+        card.className = [
+          'group relative overflow-hidden rounded-2xl bg-wc-card shadow-soft border border-rose-100 mb-3 transition-all tap',
+          isDone ? 'opacity-70' : 'hover:-translate-y-0.5'
+        ].join(' ');
+
+        card.innerHTML = `
+          <div class="absolute inset-0 pointer-events-none bg-gradient-to-r ${isDone ? 'from-transparent to-transparent' : 'from-wc-accent/40 to-transparent'}"></div>
+          <div class="p-4 sm:p-5">
+            <div class="flex items-start gap-3">
+              <div class="shrink-0 rounded-xl px-2.5 py-1.5 text-[11px] font-bold bg-rose-100 text-rose-700 border border-rose-200">${s.timeLabel}</div>
+              <div class="min-w-0 flex-1">
+                <h3 class="text-sm sm:text-base font-semibold ${isDone ? 'line-through decoration-rose-400/70' : ''}">${s.title}</h3>
+                <p class="mt-1 text-[12px] text-rose-700/80">${s.slot}</p>
+                ${s.speakers ? `<p class="mt-1 text-[12px] text-rose-700/90"><span class='font-medium'>Speakers:</span> ${s.speakers}</p>` : ''}
+                ${s.categories ? `<div class="mt-2 flex flex-wrap gap-1.5">${s.categories.map(c => `<span class='text-[10px] px-2 py-1 rounded-full bg-rose-50 border border-rose-200 text-rose-700/90'>${c}</span>`).join('')}</div>` : ''}
+              </div>
+            </div>
+            <div class="mt-3 flex items-center justify-between">
+              <div class="flex items-center gap-2 text-[11px]">
+                ${s.fav ? `<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-gradient-to-r from-wc-primary to-wc-primaryDark text-white font-semibold">★ <span>Favorite</span></span>` : ''}
+                ${isDone ? `<span class="text-rose-700/80">✔ Completed</span>` : ''}
+              </div>
+              <button data-id="${s.id}" class="toggleBtn rounded-xl px-3 py-2 text-xs font-semibold ${isDone ? 'bg-white border border-rose-200 hover:bg-rose-50' : 'bg-wc-primary text-white hover:opacity-95'} focus:outline-none focus:ring-2 focus:ring-wc-primary">${isDone ? 'Mark as not done' : 'Mark complete'}</button>
+            </div>
+          </div>`;
+
+        app.appendChild(card);
+      });
+
+      if (!list.length) {
+        app.innerHTML = `<div class='text-center text-sm text-rose-700/80 py-10'>No sessions match this filter.</div>`;
+      }
+    }
+
+    // ---- EVENTS ----
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.toggleBtn');
+      if (!btn) return;
+      const id = btn.getAttribute('data-id');
+      state[id] = state[id] || {};
+      state[id].done = !state[id].done;
+      saveState(state);
+      render();
+      // Scroll the toggled card into view (nice on mobile)
+      setTimeout(() => {
+        const target = [...document.querySelectorAll('.toggleBtn')].find(b => b.getAttribute('data-id') === id);
+        target?.closest('article')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 60);
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      localStorage.removeItem(STORAGE_KEY);
+      Object.keys(state).forEach(k => delete state[k]);
+      render();
+    });
+
+    document.getElementById('showFav').addEventListener('change', render);
+
+    document.getElementById('toggleCompact').addEventListener('click', () => {
+      const root = document.documentElement;
+      const isCompact = root.classList.toggle('compact');
+      document.getElementById('toggleCompact').classList.toggle('bg-wc-accent', isCompact);
+      document.getElementById('toggleCompact').classList.toggle('bg-rose-200', !isCompact);
+      render();
+    });
+
+    // Compact class tunes spacing via Tailwind utilities we swap via CSS variables
+    const observer = new MutationObserver(() => {
+      // Could be extended to alter spacing; kept lightweight for this single-file build
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+    // Initial render
+    render();
+  </script>
+</body>
+</html>

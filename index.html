@@ -40,26 +40,21 @@
     }
     .tap { -webkit-tap-highlight-color: transparent; }
     
-    /* Compact mode styles */
-    .compact #app article {
-      margin-bottom: 0.5rem !important;
+    /* Session card animation */
+    .session-card {
+      transition: opacity 0.4s ease-out, transform 0.4s ease-out, max-height 0.4s ease-out, margin 0.4s ease-out, padding 0.4s ease-out;
+      max-height: 1000px;
     }
-    .compact #app article > div:last-child {
-      padding: 0.75rem 1rem !important;
-    }
-    .compact #app article h3 {
-      font-size: 0.825rem !important;
-      line-height: 1.25 !important;
-    }
-    .compact #app article .mt-2 {
-      margin-top: 0.375rem !important;
-    }
-    .compact #app article .mt-3 {
-      margin-top: 0.5rem !important;
-    }
-    .compact #app article .categories span {
-      padding: 0.125rem 0.5rem !important;
-      font-size: 9px !important;
+    
+    .session-card.fade-out {
+      opacity: 0;
+      transform: translateY(-15px);
+      max-height: 0;
+      margin-bottom: 0 !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      overflow: hidden;
+      pointer-events: none;
     }
   </style>
 </head>
@@ -72,17 +67,11 @@
     <div class="absolute inset-0 bg-gradient-to-r from-white/85 via-white/75 to-white/85"></div>
     <!-- Content -->
     <div class="relative max-w-3xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
-      <div class="flex items-center gap-3">
-        <div class="size-9 rounded-xl bg-gradient-to-br from-wc-primary to-wc-primaryDark grid place-items-center text-white font-black shadow-soft">W</div>
-        <div>
-          <h1 class="text-base sm:text-lg font-bold leading-tight">WordCamp Dhaka 2025</h1>
-          <p class="text-xs sm:text-sm text-rose-700/90">Oct 18, 2025 · Senaprangon, Dhaka Cantonment (UTC+06)</p>
-        </div>
+      <div>
+        <h1 class="text-base sm:text-lg font-bold leading-tight">WordCamp Dhaka 2025</h1>
+        <p class="text-xs sm:text-sm text-rose-700/90">Oct 18, 2025 · Senaprangon, Dhaka Cantonment (UTC+06)</p>
       </div>
-      <div class="flex items-center gap-2">
-        <button id="toggleCompact" class="tap rounded-xl px-3 py-2 text-xs font-semibold bg-wc-accent text-wc-ink hover:bg-rose-200 focus:outline-none focus:ring-2 focus:ring-wc-primary shadow-sm">Compact</button>
-        <button id="resetBtn" class="tap rounded-xl px-3 py-2 text-xs font-semibold bg-white border border-rose-200 hover:bg-rose-50 focus:outline-none focus:ring-2 focus:ring-wc-primary shadow-sm">Reset</button>
-      </div>
+      <button id="resetBtn" class="tap rounded-xl px-3 py-2 text-xs font-semibold bg-white border border-rose-200 hover:bg-rose-50 focus:outline-none focus:ring-2 focus:ring-wc-primary shadow-sm">Reset</button>
     </div>
   </header>
 
@@ -159,6 +148,8 @@
       { id:'1640p', timeLabel:'4:40 pm +06', title:'Closing Remarks', slot:'4:40 pm - 5:45 pm' }
     ];
 
+
+
     // ---- PERSISTENCE ----
     const STORAGE_KEY = 'wcd2025_schedule_state_v1';
     const loadState = () => {
@@ -172,7 +163,6 @@
 
     function render() {
       const showFavOnly = document.getElementById('showFav').checked;
-      const compact = document.documentElement.classList.contains('compact');
 
       // Partition by completion, keep original serial inside each bucket
       const notDone = [], done = [];
@@ -187,28 +177,28 @@
         const isDone = !!state[s.id]?.done;
         const card = document.createElement('article');
         card.className = [
-          'group relative overflow-hidden rounded-2xl bg-wc-card shadow-soft border border-rose-100 mb-3 transition-all tap',
+          'session-card group relative overflow-hidden rounded-2xl bg-wc-card shadow-soft border border-rose-100 mb-3 tap',
           isDone ? 'opacity-70' : 'hover:-translate-y-0.5'
         ].join(' ');
 
         card.innerHTML = `
           <div class="absolute inset-0 pointer-events-none bg-gradient-to-r ${isDone ? 'from-transparent to-transparent' : 'from-wc-accent/40 to-transparent'}"></div>
           <div class="p-4 sm:p-5">
-            <div class="flex items-start gap-3">
-              <div class="shrink-0 rounded-xl px-2.5 py-1.5 text-[11px] font-bold bg-rose-100 text-rose-700 border border-rose-200">${s.timeLabel}</div>
-              <div class="min-w-0 flex-1">
-                <h3 class="text-sm sm:text-base font-semibold ${isDone ? 'line-through decoration-rose-400/70' : ''}">${s.title}</h3>
-                <p class="mt-1 text-[12px] text-rose-700/80">${s.slot}</p>
-                ${s.speakers ? `<p class="mt-1 text-[12px] text-rose-700/90"><span class='font-medium'>Speakers:</span> ${s.speakers}</p>` : ''}
-                ${s.categories ? `<div class="mt-2 flex flex-wrap gap-1.5 categories">${s.categories.map(c => `<span class='text-[10px] px-2 py-1 rounded-full bg-rose-50 border border-rose-200 text-rose-700/90'>${c}</span>`).join('')}</div>` : ''}
+            <div class="w-full">
+              <div class="flex items-start gap-3">
+                <input type="checkbox" ${isDone ? 'checked' : ''} data-id="${s.id}" class="toggleCheckbox mt-1 size-5 rounded border-rose-300 text-wc-primary focus:ring-wc-primary cursor-pointer" />
+                <div class="flex-1">
+                  <h3 class="text-base sm:text-lg font-semibold ${isDone ? 'line-through decoration-rose-400/70' : ''}">${s.title}</h3>
+                  <p class="mt-1 text-sm text-rose-700/80 font-medium">${s.slot}</p>
+                  ${s.speakers ? `<p class="mt-1 text-sm text-rose-700/90"><span class='font-medium'>Speaker:</span> ${s.speakers}</p>` : ''}
+                  ${s.categories ? `
+                    <div class="mt-3 flex flex-wrap items-center gap-1.5">
+                      ${s.categories.map(c => `<span class='text-xs px-2.5 py-1 rounded-full bg-rose-50 border border-rose-200 text-rose-700/90'>${c}</span>`).join('')}
+                      ${s.fav ? `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-gradient-to-r from-wc-primary to-wc-primaryDark text-white font-semibold text-xs ml-2">★ Favorite</span>` : ''}
+                    </div>
+                  ` : s.fav ? `<div class="mt-3"><span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-gradient-to-r from-wc-primary to-wc-primaryDark text-white font-semibold text-xs">★ Favorite</span></div>` : ''}
+                </div>
               </div>
-            </div>
-            <div class="mt-3 flex items-center justify-between">
-              <div class="flex items-center gap-2 text-[11px]">
-                ${s.fav ? `<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-gradient-to-r from-wc-primary to-wc-primaryDark text-white font-semibold">★ <span>Favorite</span></span>` : ''}
-                ${isDone ? `<span class="text-rose-700/80">✔ Completed</span>` : ''}
-              </div>
-              <button data-id="${s.id}" class="toggleBtn rounded-xl px-3 py-2 text-xs font-semibold ${isDone ? 'bg-white border border-rose-200 hover:bg-rose-50' : 'bg-wc-primary text-white hover:opacity-95'} focus:outline-none focus:ring-2 focus:ring-wc-primary">${isDone ? 'Mark as not done' : 'Mark complete'}</button>
             </div>
           </div>`;
 
@@ -221,14 +211,29 @@
     }
 
     // ---- EVENTS ----
-    document.addEventListener('click', (e) => {
-      const btn = e.target.closest('.toggleBtn');
-      if (!btn) return;
-      const id = btn.getAttribute('data-id');
-      state[id] = state[id] || {};
-      state[id].done = !state[id].done;
-      saveState(state);
-      render();
+    document.addEventListener('change', (e) => {
+      if (!e.target.classList.contains('toggleCheckbox')) return;
+      const id = e.target.getAttribute('data-id');
+      const card = e.target.closest('.session-card');
+      const wasChecked = !!state[id]?.done;
+      const isNowChecked = e.target.checked;
+      
+      // Only animate if state is actually changing
+      if (wasChecked !== isNowChecked) {
+        // Disable checkbox to prevent multiple clicks
+        e.target.disabled = true;
+        
+        // Add fade-out animation
+        card.classList.add('fade-out');
+        
+        // Update state after animation completes
+        setTimeout(() => {
+          state[id] = state[id] || {};
+          state[id].done = isNowChecked;
+          saveState(state);
+          render();
+        }, 400);
+      }
     });
 
     document.getElementById('resetBtn').addEventListener('click', () => {
@@ -239,22 +244,6 @@
 
     document.getElementById('showFav').addEventListener('change', render);
 
-    document.getElementById('toggleCompact').addEventListener('click', () => {
-      const root = document.documentElement;
-      const isCompact = root.classList.toggle('compact');
-      const btn = document.getElementById('toggleCompact');
-      
-      if (isCompact) {
-        btn.textContent = 'Normal';
-        btn.classList.remove('bg-wc-accent');
-        btn.classList.add('bg-rose-200');
-      } else {
-        btn.textContent = 'Compact';
-        btn.classList.remove('bg-rose-200');
-        btn.classList.add('bg-wc-accent');
-      }
-    });
-
     // Smooth scroll to top functionality
     document.getElementById('backToTop').addEventListener('click', () => {
       window.scrollTo({
@@ -262,12 +251,6 @@
         behavior: 'smooth'
       });
     });
-
-    // Compact class tunes spacing via Tailwind utilities we swap via CSS variables
-    const observer = new MutationObserver(() => {
-      // Could be extended to alter spacing; kept lightweight for this single-file build
-    });
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
 
     // Initial render
     render();

@@ -43,18 +43,23 @@
 </head>
 <body class="bg-wc-bg text-wc-ink min-h-screen flex flex-col">
   <!-- Header -->
-  <header class="skyline sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-white/70 bg-white/90 border-b border-rose-100">
-    <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+  <header class="relative sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-white/70 bg-white/90 border-b border-rose-100 overflow-hidden">
+    <!-- Background Image -->
+    <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" style="background-image: url('https://dhaka.wordcamp.org/2025/files/2025/08/bg_img-scaled.webp');"></div>
+    <!-- Gradient Overlay -->
+    <div class="absolute inset-0 bg-gradient-to-r from-white/85 via-white/75 to-white/85"></div>
+    <!-- Content -->
+    <div class="relative max-w-3xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
       <div class="flex items-center gap-3">
         <div class="size-9 rounded-xl bg-gradient-to-br from-wc-primary to-wc-primaryDark grid place-items-center text-white font-black shadow-soft">W</div>
         <div>
           <h1 class="text-base sm:text-lg font-bold leading-tight">WordCamp Dhaka 2025</h1>
-          <p class="text-xs sm:text-sm text-rose-700/80">Oct 18, 2025 · Senaprangon, Dhaka Cantonment (UTC+06)</p>
+          <p class="text-xs sm:text-sm text-rose-700/90">Oct 18, 2025 · Senaprangon, Dhaka Cantonment (UTC+06)</p>
         </div>
       </div>
       <div class="flex items-center gap-2">
-        <button id="toggleCompact" class="tap rounded-xl px-3 py-2 text-xs font-semibold bg-wc-accent text-wc-ink hover:bg-rose-200 focus:outline-none focus:ring-2 focus:ring-wc-primary">Compact</button>
-        <button id="resetBtn" class="tap rounded-xl px-3 py-2 text-xs font-semibold bg-white border border-rose-200 hover:bg-rose-50 focus:outline-none focus:ring-2 focus:ring-wc-primary">Reset</button>
+        <button id="toggleCompact" class="tap rounded-xl px-3 py-2 text-xs font-semibold bg-wc-accent text-wc-ink hover:bg-rose-200 focus:outline-none focus:ring-2 focus:ring-wc-primary shadow-sm">Compact</button>
+        <button id="resetBtn" class="tap rounded-xl px-3 py-2 text-xs font-semibold bg-white border border-rose-200 hover:bg-rose-50 focus:outline-none focus:ring-2 focus:ring-wc-primary shadow-sm">Reset</button>
       </div>
     </div>
   </header>
@@ -81,10 +86,28 @@
   <main class="max-w-3xl mx-auto w-full px-4 pb-24" id="app"></main>
 
   <!-- Footer Nav -->
-  <footer class="fixed bottom-0 inset-x-0 bg-white/95 border-t border-rose-200 backdrop-blur">
-    <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
-      <span class="text-xs text-rose-700/80">Data persists to your browser</span>
-      <a href="#top" class="tap rounded-lg px-3 py-2 text-xs font-semibold bg-wc-primary text-white hover:opacity-95">Back to top</a>
+  <footer class="fixed bottom-0 inset-x-0 bg-gradient-to-r from-white/95 via-rose-50/95 to-white/95 border-t border-rose-200 backdrop-blur shadow-lg">
+    <div class="max-w-3xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2 text-rose-600">
+            <span class="text-lg">💖</span>
+            <span class="text-sm font-medium">Loved it? Let's connect!</span>
+          </div>
+          <a href="https://www.linkedin.com/in/hafix/" target="_blank" rel="noopener noreferrer" class="tap group flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-soft hover:shadow-lg hover:scale-105 transition-all duration-200">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 group-hover:scale-110 transition-transform">
+              <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"></path>
+            </svg>
+            <span class="text-xs font-semibold">@hafix</span>
+          </a>
+        </div>
+        <a href="#top" class="tap group rounded-xl px-4 py-2 text-xs font-semibold bg-gradient-to-r from-wc-primary to-wc-primaryDark text-white shadow-soft hover:shadow-lg hover:scale-105 transition-all duration-200">
+          <span class="flex items-center gap-1">
+            <span>Back to top</span>
+            <span class="group-hover:-translate-y-0.5 transition-transform">↑</span>
+          </span>
+        </a>
+      </div>
     </div>
   </footer>
 

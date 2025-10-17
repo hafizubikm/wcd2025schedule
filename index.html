@@ -186,11 +186,6 @@
       state[id].done = !state[id].done;
       saveState(state);
       render();
-      // Scroll the toggled card into view (nice on mobile)
-      setTimeout(() => {
-        const target = [...document.querySelectorAll('.toggleBtn')].find(b => b.getAttribute('data-id') === id);
-        target?.closest('article')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 60);
     });
 
     document.getElementById('resetBtn').addEventListener('click', () => {

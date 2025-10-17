@@ -39,6 +39,28 @@
       background: linear-gradient(180deg, rgba(255,107,107,0.08), rgba(255,107,107,0.04) 40%, rgba(255,107,107,0.0));
     }
     .tap { -webkit-tap-highlight-color: transparent; }
+    
+    /* Compact mode styles */
+    .compact #app article {
+      margin-bottom: 0.5rem !important;
+    }
+    .compact #app article > div:last-child {
+      padding: 0.75rem 1rem !important;
+    }
+    .compact #app article h3 {
+      font-size: 0.825rem !important;
+      line-height: 1.25 !important;
+    }
+    .compact #app article .mt-2 {
+      margin-top: 0.375rem !important;
+    }
+    .compact #app article .mt-3 {
+      margin-top: 0.5rem !important;
+    }
+    .compact #app article .categories span {
+      padding: 0.125rem 0.5rem !important;
+      font-size: 9px !important;
+    }
   </style>
 </head>
 <body class="bg-wc-bg text-wc-ink min-h-screen flex flex-col">
@@ -178,7 +200,7 @@
                 <h3 class="text-sm sm:text-base font-semibold ${isDone ? 'line-through decoration-rose-400/70' : ''}">${s.title}</h3>
                 <p class="mt-1 text-[12px] text-rose-700/80">${s.slot}</p>
                 ${s.speakers ? `<p class="mt-1 text-[12px] text-rose-700/90"><span class='font-medium'>Speakers:</span> ${s.speakers}</p>` : ''}
-                ${s.categories ? `<div class="mt-2 flex flex-wrap gap-1.5">${s.categories.map(c => `<span class='text-[10px] px-2 py-1 rounded-full bg-rose-50 border border-rose-200 text-rose-700/90'>${c}</span>`).join('')}</div>` : ''}
+                ${s.categories ? `<div class="mt-2 flex flex-wrap gap-1.5 categories">${s.categories.map(c => `<span class='text-[10px] px-2 py-1 rounded-full bg-rose-50 border border-rose-200 text-rose-700/90'>${c}</span>`).join('')}</div>` : ''}
               </div>
             </div>
             <div class="mt-3 flex items-center justify-between">
@@ -220,9 +242,17 @@
     document.getElementById('toggleCompact').addEventListener('click', () => {
       const root = document.documentElement;
       const isCompact = root.classList.toggle('compact');
-      document.getElementById('toggleCompact').classList.toggle('bg-wc-accent', isCompact);
-      document.getElementById('toggleCompact').classList.toggle('bg-rose-200', !isCompact);
-      render();
+      const btn = document.getElementById('toggleCompact');
+      
+      if (isCompact) {
+        btn.textContent = 'Normal';
+        btn.classList.remove('bg-wc-accent');
+        btn.classList.add('bg-rose-200');
+      } else {
+        btn.textContent = 'Compact';
+        btn.classList.remove('bg-rose-200');
+        btn.classList.add('bg-wc-accent');
+      }
     });
 
     // Compact class tunes spacing via Tailwind utilities we swap via CSS variables
